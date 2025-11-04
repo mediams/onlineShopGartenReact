@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '../../components/container/Container';
 import ProductDetailsSection from '../../components/productDetailsSection/ProductDetailsSection';
 import useFetchDetails from '../../utils/useFetchDetails';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import BreadCrumbs from '../../components/breadCrumbs/BreadCrumbs';
 import styles from './ProductDetails.module.scss';
 

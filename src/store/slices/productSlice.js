@@ -28,15 +28,24 @@ export const productSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.selectedCategoryId = '';
         state.loading = false;
+
         state.data = action.payload.map((item) => {
+          const price = Number(item.price ?? 0);
+          const discont = Number(item.discountPrice ?? 0); // с бэка: discountPrice
           let discountPercentage = 0;
-        
-          if (item.price > 0 && item.discont_price > 0) {
-            discountPercentage = 100 - (item.discont_price * 100) / item.price;
+
+          if (price > 0 && discont > 0) {
+            discountPercentage = 100 - (discont * 100) / price;
           }
+
           return {
+            // оставляем всё, что пришло
             ...item,
-            discountPercentage: parseFloat(discountPercentage.toFixed(2)),
+            // выравниваем имена под вашу карточку
+            title: item.title ?? item.name,
+            discont_price: discont,     // если компонент ждёт это имя
+            image: item.image,          // уже полное URL по контракту DTO
+            discountPercentage: Number(discountPercentage.toFixed(2)),
           };
         });
       })

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE_BACKEND_URL } from './env';
+
 export const getAllCategories = async () => {
   try {
     const response = await fetch(`${BASE_BACKEND_URL}/categories`);
@@ -28,7 +29,7 @@ export const getCategoryById = async (id) => {
 
 export const getAllProducts = async () => {
   try {
-    const response = await fetch(`${BASE_BACKEND_URL}/products`);
+    const response = await fetch(`${BASE_BACKEND_URL}/products/all`);
     if (!response.ok) {
       throw new Error('Something went wrong!');
     }
@@ -86,21 +87,26 @@ export const sendForOrder = async (data) => {
   }
 };
 
+// utils/fetchClient.js
 export const fetchProducts = createAsyncThunk(
   'product/fetchProducts',
   async (type) => {
-    const response = await fetch(`${BASE_BACKEND_URL}/products`);
+    const response = await fetch(`${BASE_BACKEND_URL}/products/all`);
     if (!response.ok) {
       throw new Error('Failed to fetch!' + response.statusText);
     }
-    let data = await response.json();
+
+    const data = await response.json(); 
+    const list = Array.isArray(data) ? data : (data?.content ?? []);
+
     if (type === 'all') {
-      return data;
+      return list;
     } else {
-      return data.filter((item) => item.discont_price > 0);
+      return list.filter((item) => Number(item.discountPrice) > 0);
     }
   }
 );
+
 
 export const fetchCategories = createAsyncThunk(
   'product/fetchCategories',
