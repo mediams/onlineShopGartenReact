@@ -57,7 +57,7 @@ const ProductOfTheDayCard = () => {
   const { image, title, price } = productOfTheDay;
   const discountPercentage = 50;
   const discont_price = price / 2;
-  const imageUrl = `${BASE_BACKEND_URL}${image}`;
+  const imageUrl = `${image}`;
 
   const handleLike = () => {
     if (!productOfTheDay) return;

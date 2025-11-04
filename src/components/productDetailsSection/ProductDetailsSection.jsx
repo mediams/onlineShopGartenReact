@@ -63,14 +63,14 @@ const ProductDetailsSection = ({ product, loading }) => {
       <div className={styles.productImg}>
         <img
           className={styles.img}
-          src={`${BASE_BACKEND_URL}${image}`}
+          src={`${image}`}
           alt={title}
           onClick={() =>
             openDialog(
               'type1',
               <img
                 className={styles.img}
-                src={`${BASE_BACKEND_URL}${image}`}
+                src={`${image}`}
                 alt={title}
               />
             )

@@ -41,7 +41,7 @@ export default function ItemInCart({product}) {
       <div className={styles.itemInCart_imageContainer}>
         <Link to={`/products/${product.id}`}>
           <img
-            src={`${BASE_BACKEND_URL}${product.image}`}
+            src={`${product.image}`}
             alt={product.title}
           />
         </Link>

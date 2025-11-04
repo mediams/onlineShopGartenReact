@@ -18,7 +18,7 @@ const SaleCard = ({ title, image, discont_price, price }) => {
       <div className={styles.productCard_image}>
         <img
           className={styles.image}
-          src={`${BASE_BACKEND_URL}${image}`}
+          src={`${image}`}
           alt={`Product ${title}`}
         />
       </div>
