@@ -2,13 +2,14 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE_BACKEND_URL } from './env';
 export const getAllCategories = async () => {
   try {
-    const response = await fetch(`${BASE_BACKEND_URL}/categories/all`);
+    const response = await fetch(`${BASE_BACKEND_URL}/categories`);
     if (!response.ok) {
       throw new Error('Something went wrong!');
     }
     return await response.json();
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
@@ -21,18 +22,20 @@ export const getCategoryById = async (id) => {
     return await response.json();
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
 export const getAllProducts = async () => {
   try {
-    const response = await fetch(`${BASE_BACKEND_URL}/products/all`);
+    const response = await fetch(`${BASE_BACKEND_URL}/products`);
     if (!response.ok) {
       throw new Error('Something went wrong!');
     }
     return await response.json();
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
@@ -45,6 +48,7 @@ export const getProductById = async (id) => {
     return await response.json();
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
@@ -61,6 +65,7 @@ export const sendForSale = async (data) => {
     return await response.json();
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
@@ -77,13 +82,14 @@ export const sendForOrder = async (data) => {
     return await response.json();
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
 export const fetchProducts = createAsyncThunk(
   'product/fetchProducts',
   async (type) => {
-    const response = await fetch(`${BASE_BACKEND_URL}/products/all`);
+    const response = await fetch(`${BASE_BACKEND_URL}/products`);
     if (!response.ok) {
       throw new Error('Failed to fetch!' + response.statusText);
     }
@@ -99,7 +105,7 @@ export const fetchProducts = createAsyncThunk(
 export const fetchCategories = createAsyncThunk(
   'product/fetchCategories',
   async () => {
-    const response = await fetch(`${BASE_BACKEND_URL}/categories/all`);
+    const response = await fetch(`${BASE_BACKEND_URL}/categories`);
     if (!response.ok) {
       throw new Error('Failed to fetch!' + response.statusText);
     }

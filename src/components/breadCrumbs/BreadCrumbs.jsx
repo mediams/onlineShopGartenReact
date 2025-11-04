@@ -1,14 +1,18 @@
-import {Link, useLocation} from "react-router";
-import styles from "./BreadCrumbs.module.scss";
-import {useEffect, useMemo, useState} from "react";
-import {getCategoryById, getProductById} from "../../utils/fetchClient";
-import classNames from "classnames";
+import { Link, useLocation } from 'react-router-dom';
+import styles from './BreadCrumbs.module.scss';
+import { useEffect, useMemo, useState } from 'react';
+import { getCategoryById, getProductById } from '../../utils/fetchClient';
+import classNames from 'classnames';
 
 export default function BreadCrumbs() {
-  const body = document.querySelector('body');
-  console.log(body.classList[0]);
+  const isDark =
+    typeof document !== 'undefined' &&
+    document.body?.classList?.contains('dark');
   const location = useLocation();
-  const wayArray = useMemo(() => location.pathname.split("/").slice(1), [location]);
+  const wayArray = useMemo(
+    () => location.pathname.split('/').slice(1),
+    [location]
+  );
   const [way, setWay] = useState({
     place: wayArray[0],
     catId: '',
@@ -16,28 +20,28 @@ export default function BreadCrumbs() {
   });
 
   const [placeName, setPlaceName] = useState(null);
-  
+
   useEffect(() => {
     switch (way.place) {
       case 'categories':
         setPlaceName('Categories');
-        if(wayArray[2]) {
-          getProductById(wayArray[2]).then(res => {
-            setWay((prev) => ({...prev, prodId: res[0].title}))
+        if (wayArray[2]) {
+          getProductById(wayArray[2]).then((res) => {
+            setWay((prev) => ({ ...prev, prodId: res.title }));
           });
         }
 
         if (wayArray[1]) {
           getCategoryById(wayArray[1]).then((res) => {
-            setWay((prev) => ({ ...prev, catId: res.category.title }));
+            setWay((prev) => ({ ...prev, catId: res.name }));
           });
         }
         break;
       case 'products':
         setPlaceName('All products');
-        if(wayArray[1]) {
+        if (wayArray[1]) {
           getProductById(wayArray[1]).then((res) => {
-            setWay((prev) => ({ ...prev, prodId: res[0].title }));
+            setWay((prev) => ({ ...prev, prodId: res.title }));
           });
         }
 
@@ -46,7 +50,7 @@ export default function BreadCrumbs() {
         setPlaceName('All sales');
         if (wayArray[1]) {
           getProductById(wayArray[1]).then((res) => {
-            setWay((prev) => ({ ...prev, prodId: res[0].title }));
+            setWay((prev) => ({ ...prev, prodId: res.title }));
           });
         }
         break;
@@ -54,19 +58,16 @@ export default function BreadCrumbs() {
         setPlaceName('Liked products');
         if (wayArray[1]) {
           getProductById(wayArray[1]).then((res) => {
-            setWay((prev) => ({ ...prev, prodId: res[0].title }));
+            setWay((prev) => ({ ...prev, prodId: res.title }));
           });
         }
         break;
       default:
         console.log('other!');
     }
+  }, [wayArray]);
 
-  }, [wayArray])
-
-  useEffect(() => {
-
-  }, [])
+  useEffect(() => {}, []);
 
   return (
     <div className={styles.bread_crumbs}>
@@ -91,7 +92,7 @@ export default function BreadCrumbs() {
           className={classNames(
             `${styles.bread_crumbs__link} bread_crumbs__link`,
             {
-              [styles.dark]: body.classList.contains('dark'),
+              [styles.dark]: isDark,
             }
           )}
         >
