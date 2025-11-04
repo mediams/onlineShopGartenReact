@@ -27,22 +27,30 @@ const CategoryCard = ({ limit, onCategoriesPage }) => {
           onCategoriesPage ? styles.onCategoriesPage : styles.onHomePage
         }
       >
-        {categories.slice(0, limit).map((item) => (
-          <Link key={item.id} to={`/categories/${item.id}`}>
-            <div className={styles.itemWrapper}>
-              <div className={styles.imageContainer}>
-                <img
-                  src={`${BASE_BACKEND_URL}${item.image}`}
-                  alt={`Category ${item.title}`}
-                  className={styles.categoriesImage}
-                />
+        {categories.slice(0, limit).map((item) => {
+          const categoryName = item?.name ?? item?.title ?? 'Category';
+          const categoryImagePath = item?.imageUrl ?? item?.image ?? '';
+          const imageSrc = categoryImagePath.startsWith('http')
+            ? categoryImagePath
+            : `${BASE_BACKEND_URL}${categoryImagePath}`;
+
+          return (
+            <Link key={item.id} to={`/categories/${item.id}`}>
+              <div className={styles.itemWrapper}>
+                <div className={styles.imageContainer}>
+                  <img
+                    src={imageSrc}
+                    alt={`Category ${categoryName}`}
+                    className={styles.categoriesImage}
+                  />
+                </div>
               </div>
-            </div>
-            <div className={styles.categoriesTitle}>
-              <p>{item.title}</p>
-            </div>
-          </Link>
-        ))}
+              <div className={styles.categoriesTitle}>
+                <p>{categoryName}</p>
+              </div>
+            </Link>
+          );
+        })}
       </div>
       <ButtonLink
         to="/categories"

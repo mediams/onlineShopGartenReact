@@ -15,8 +15,7 @@ export default function CategoryProducts() {
     <section>
       <Container>
         <BreadCrumbs />
-        <SectionTitle>{category?.name ?? 'Category'}</SectionTitle>
-
+        <SectionTitle>{category?.name ?? category?.title ?? 'Category'}</SectionTitle>
         <Filter />
         <ProductsList data={data} />
       </Container>

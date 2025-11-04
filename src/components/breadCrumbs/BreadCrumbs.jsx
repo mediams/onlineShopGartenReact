@@ -33,7 +33,9 @@ export default function BreadCrumbs() {
 
         if (wayArray[1]) {
           getCategoryById(wayArray[1]).then((res) => {
-            setWay((prev) => ({ ...prev, catId: res.name }));
+            const categoryName =
+              res?.category?.name ?? res?.category?.title ?? 'Category';
+            setWay((prev) => ({ ...prev, catId: categoryName }));
           });
         }
         break;
