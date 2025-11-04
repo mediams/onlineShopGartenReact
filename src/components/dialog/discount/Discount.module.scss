@@ -1,0 +1,67 @@
+@use '../../../assets/styles/mixin' as *;
+@use '../../../assets/styles/colors' as *;
+
+.dialog {
+  background-color: $green;
+  position: fixed;
+  padding: 20px;
+  border: none;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 100;
+  max-width: 440px;
+  top: 60px;
+  @include on-tablet {
+    padding: 32px;
+    max-width: 548px;
+  }
+}
+
+.discount {
+  background-color: transparent;
+  color: $txt-white;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.discountTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 110%;
+  letter-spacing: 0;
+  color: $txt-white;
+  margin: 0;
+
+  @include on-mobile {
+    font-size: 40px;
+  }
+
+  @include on-tablet {
+    font-size: 36px;
+  }
+}
+
+.closeBtn {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.svgBtn {
+  width: 40px;
+  height: 40px;
+  stroke: $txt-white;
+}

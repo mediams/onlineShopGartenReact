@@ -1,0 +1,16 @@
+@use '../../assets/styles/mixin' as *;
+@use '../../assets/styles/colors' as *;
+
+.sectionTitle {
+  font-size: clamp(2.5rem, 10vw, 4rem);
+  line-height: 110%;
+  text-transform: capitalize;
+  font-weight: 700;
+  padding-right: 14px;
+  @include on-tablet {
+    padding-inline-end: 16px;
+  }
+  @include on-laptop {
+    padding-right: 32px;
+  }
+}

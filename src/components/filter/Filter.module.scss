@@ -1,0 +1,83 @@
+@use '../../assets/styles/mixin' as *;
+@use '../../assets/styles/colors' as *;
+
+.label {
+  display: block;
+  font-size: 16px;
+  align-items: center;
+  @include on-tablet {
+    font-size: 18px;
+  }
+  @include on-design {
+    font-size: 20px;
+  }
+}
+.container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  @include on-tablet {
+    gap: 16px;
+  }
+}
+.formContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 16px;
+  row-gap: 16px;
+  gap: 16px;
+  @include on-tablet {
+    row-gap: 20px;
+    column-gap: 40px;
+  }
+  @include on-design {
+    gap: 40px;
+    padding-top: 40px;
+  }
+}
+.checkboxInput {
+  @include borderFilter;
+  display: block;
+  margin-right: 10px;
+  width: 36px;
+  height: 36px;
+  background-color: $txt-white;
+  appearance: none;
+  margin-right: 10px;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+  position: relative;
+}
+
+.checkboxInput:checked {
+  background-color: $green;
+  border-color: $green;
+}
+
+.checkboxInput:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 10px;
+  width: 12px;
+  height: 20px;
+  border: solid $txt-white;
+  border-width: 0 4px 4px 0;
+  transform: rotate(45deg);
+}
+.inputField {
+  display: block;
+  max-width: 112px;
+  padding: 8px 16px;
+  @include borderFilter;
+  border-radius: 6px;
+  line-height: 1.26%;
+}
+
+.inputField:focus {
+  border-color: $green;
+  outline: none;
+  background-color: $light_green;
+}

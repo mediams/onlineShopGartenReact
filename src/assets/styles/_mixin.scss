@@ -1,0 +1,76 @@
+@use './colors' as *;
+
+@mixin on-mobile {
+  @media (min-width: 480px) {
+    @content;
+  }
+}
+@mixin on-tablet {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+@mixin on-laptop {
+  @media (min-width: 1000px) {
+    @content;
+  }
+}
+
+@mixin on-design {
+  @media (min-width: 1440px) {
+    @content;
+  }
+}
+
+@mixin linkSectionNav {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.26;
+  border-radius: 6px;
+  padding: 5px 16px;
+  border: none;
+  cursor: pointer;
+  transition-duration: 300ms;
+}
+
+@mixin shadowLight {
+  -webkit-box-shadow: 0px 1px 3px 1px $shadowHoverLight;
+  -moz-box-shadow: 0px 1px 3px 1px $shadowHoverLight;
+  box-shadow: 0px 1px 3px 1px $shadowHoverLight;
+}
+
+@mixin borderFilter {
+  border: 1px solid $light-grey;
+  border-radius: 6px;
+}
+@mixin buttonOutlined {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 129px;
+  height: 32px;
+  font-size: 0.875rem;
+  transition-duration: 300ms;
+  border-radius: 6px;
+  background-color: transparent;
+  color: $txt-grey;
+  border: 1px solid $light-grey;
+}
+@mixin productCartBtn {
+  width: 100%;
+  margin: 0 auto;
+
+  border: none;
+  border-radius: 4px;
+  background: $green;
+  color: $txt-white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0 32px;
+  border: 1px solid $green;
+  background-color: $green;
+  color: $txt-white;
+}

@@ -1,0 +1,9 @@
+@use "../../assets/styles/mixin" as *;
+
+.productDetails {
+  padding-block-start: 32px;
+
+  @include on-tablet {
+    padding-block-start: 0;
+  }
+}

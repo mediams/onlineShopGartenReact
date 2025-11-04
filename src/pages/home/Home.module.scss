@@ -1,0 +1,72 @@
+@use '../../assets/styles/mixin' as *;
+
+.itemWrapper {
+  display: grid;
+  grid-template-rows: 220px 1fr;
+  transition-duration: 300ms;
+  border-radius: 6px;
+  @include on-mobile {
+    grid-template-rows: 260px 1fr;
+  }
+  @include on-tablet {
+    grid-template-rows: 254px 1fr;
+  }
+  @include on-design {
+    grid-template-rows: 350px 1fr;
+  }
+
+  &:hover {
+    border-radius: 6px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    & .categoriesImage {
+      border-radius: 6px;
+      scale: 1.1;
+    }
+  }
+}
+
+.categoriesWrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 24px 0;
+  @include on-mobile {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    column-gap: 20px;
+    row-gap: 20px;
+  }
+  @include on-tablet {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    padding: 32px 0 20px;
+  }
+  @include on-laptop {
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+  }
+  @include on-design {
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+    padding: 40px 0 40px;
+  }
+}
+.categoriesTitle {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%;
+  padding-top: 12px;
+}
+.imageContainer {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.categoriesImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+  transition-duration: 300ms;
+}

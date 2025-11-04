@@ -1,0 +1,132 @@
+@use "../../assets/styles/_colors.scss" as *;
+@use "../../assets/styles/mixin" as *;
+
+.itemInCart {
+  display: flex;
+  background-color: #fff;
+  border: 1px solid $light-grey;
+  border-radius: 12px;
+  overflow: hidden;
+  max-height: min-content;
+  color: $txt-black;
+
+  container-type: inline-size;
+
+  &_imageContainer {
+    flex: 0 0 30%;
+    position: relative;
+
+    img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  @container (min-width: 440px) {
+    &_imageContainer {
+      flex: 0 1 45%;
+    }
+  }
+
+  @container (min-width: 720px) {
+    &_imageContainer {
+      flex: 0 0 30%;
+    }
+  }
+
+  &_infoSubBlock {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+
+    @include on-tablet {
+      align-items: center;
+      flex-direction: row;
+      column-gap: 12px;
+    }
+  }
+
+  &_infoContainer {
+    width: 100%;
+    padding: 20px;
+  }
+
+  &_titleBox {
+    margin-block-end: 12px;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+
+    h3 {
+      font-size: 1.25rem;
+      line-height: 120%;
+    }
+
+    button {
+      height: fit-content;
+      background-color: transparent;
+    }
+  }
+
+  &_amountBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 48px;
+    border: 1px solid $light-grey;
+    border-inline-end: none;
+    border-inline-start: none;
+    border-radius: 6px;
+    overflow: hidden;
+    max-width: 164px;
+
+    @include on-tablet {
+      max-width: 176px;
+      font-size: 1.25rem;
+      height: 58px;
+      flex: 0 0 60%;
+      margin-block-end: 0;
+      margin-inline-end: 12px;
+    }
+
+    @include on-design {
+      max-width: 200px;
+    }
+
+    button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 0 0 48px;
+      height: 48px;
+      background-color: transparent;
+      color: $txt-black;
+      border: 1px solid $light-grey;
+      border-radius: 6px;
+      box-sizing: content-box;
+
+      @include on-tablet {
+        flex: 0 0 58px;
+        height: 58px;
+      }
+    }
+  }
+
+  &_priceBox {
+    display: flex;
+    font-size: clamp(2.25rem, 6vw, 2.5rem);
+    font-weight: 600;
+    color: $txt-black;
+
+    span {
+      color: $txt-grey;
+      text-decoration: line-through;
+      font-weight: 500;
+      font-size: 1.25rem;
+    }
+  }
+}
+

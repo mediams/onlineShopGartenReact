@@ -1,0 +1,67 @@
+@use "../../assets/styles/_colors" as *;
+@use "../../assets/styles/mixin" as *;
+
+.bread_crumbs {
+  padding-block: 40px;
+  display: none;
+  visibility: hidden;
+  align-items: center;
+  column-gap: 16px;
+
+  @include on-tablet {
+      display: flex;
+      visibility: visible;
+  }
+
+  &__link {
+    position: relative;
+    height: 36px;
+    padding-inline: 16px;
+    display: flex;
+    align-items: center;
+    
+    border: 1px solid $light-grey;
+    border-radius: 8px;
+    white-space: nowrap;
+
+    &:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &::after {
+        content: "";
+        position: absolute;
+        width: 18px;
+        height: 100%;
+        right: -2px;
+        top: 0;
+        filter: blur(1px);
+        background: rgb(254, 255, 240);
+        background: linear-gradient(90deg, rgba(254, 255, 240, 0.7539390756302521) 24%, rgba(254, 255, 240, 1) 42%);
+      }
+
+      &.dark {
+        &::after {
+          background: rgb(73, 73, 73);
+          background: linear-gradient(90deg, rgba(254, 255, 240, 0.7539390756302521) 24%, rgba(254, 255, 240, 1) 42%);
+        }
+      }
+    }
+
+
+
+    &:not(:last-child) {
+      color: $txt-grey;
+      &::after {
+        content: "";
+        position: absolute;
+        height: 1px;
+        width: 18px;
+        top: 50%;
+        right: 0;
+        translate: 100% -50%;
+        background-color: $light-grey;
+      }
+    }
+  }
+}

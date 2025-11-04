@@ -1,0 +1,77 @@
+@use '../../assets/styles/mixin' as *;
+@use '../../assets/styles/colors' as *;
+.icons {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  & button {
+    background-color: transparent;
+  }
+  & svg {
+    fill: $txt-white;
+    stroke: $txt-black;
+    stroke-width: 1.1;
+    width: 32px;
+    height: 32px;
+    @include on-tablet {
+      width: 44px;
+      height: 44px;
+    }
+
+    @include on-design {
+      width: 46px;
+      height: 46px;
+    }
+  }
+  &_light {
+    & svg {
+      stroke: $txt-black;
+    }
+    & svg:hover {
+      stroke: $green;
+    }
+  }
+  &_dark {
+    & svg {
+      stroke: $txt-black;
+    }
+    & svg:hover {
+      stroke: $green;
+    }
+  }
+  &_active {
+    & svg {
+      fill: $green;
+    }
+    & svg:hover {
+      fill: $green;
+      stroke: $divider_grey;
+    }
+  }
+}
+
+.wrapperLink {
+  position: relative;
+}
+
+.cardsContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 24px 0;
+  @include on-mobile {
+    padding: 56px 0;
+    grid-template-columns: repeat(2, minmax(210px, 1fr));
+  }
+  @include on-laptop {
+    padding: 60px 0;
+    grid-template-columns: repeat(4, minmax(225px, 1fr));
+    gap: 32px;
+  }
+  @include on-design {
+    padding: 80px 0;
+  }
+}

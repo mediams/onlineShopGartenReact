@@ -1,0 +1,60 @@
+@use '../../assets/styles/mixin' as *;
+@use '../../assets/styles/colors' as *;
+
+.heroContent {
+  padding-block-start: clamp(50px, 5vw, 80px);
+  padding-block-end: clamp(50px, 5vw, 80px);
+}
+.heroTitle {
+  font-weight: 700;
+  font-size: clamp(52px, 6vw, 96px);
+  margin-bottom: 24px;
+  line-height: 1.2;
+
+  @include on-tablet {
+    margin-bottom: 40px;
+  }
+}
+.image {
+  width: 100%;
+  height: auto;
+  min-height: 460px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.imageContainer {
+  max-width: 1440px;
+
+  background-image: url('/media/hero.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  position: relative;
+  margin-inline: auto;
+  overflow: clip;
+  height: 600px;
+}
+.heroBtn {
+  @include linkSectionNav;
+  background-color: $green;
+  border: 1px solid $green;
+  padding: 12px 52px;
+  color: $txt-white;
+  @include on-tablet {
+    padding: 16px 56px;
+  }
+  &:hover {
+    color: $green;
+    background-color: $light_green;
+  }
+}
+.section {
+  padding-bottom: 56px;
+  @include on-tablet {
+    padding-bottom: 60px;
+  }
+  @include on-design {
+    padding-bottom: 80px;
+  }
+}

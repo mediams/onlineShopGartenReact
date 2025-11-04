@@ -1,0 +1,97 @@
+@use '../../assets/styles/mixin' as *;
+@use '../../assets/styles/colors' as *;
+
+.footer {
+  padding-bottom: 56px;
+  &Title {
+    margin-bottom: 24px;
+    @include on-tablet {
+      margin-bottom: 32px;
+    }
+    @include on-design {
+      margin-bottom: 40px;
+    }
+  }
+
+  &List {
+    padding-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 12px;
+    @include on-tablet {
+      grid-template-columns: 2.1fr 0.9fr;
+
+      gap: 20px;
+    }
+    @include on-laptop {
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+    }
+    @include on-design {
+      grid-template-columns: 1.4fr 1fr;
+      gap: 32px;
+    }
+
+    &Card {
+      background-color: $light_green;
+      border-radius: 12px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      @include on-tablet {
+        padding: 32px;
+        gap: 16px;
+        height: 100%;
+      }
+
+      &:nth-child(2) {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 20px;
+        @include on-tablet {
+          flex-direction: column;
+          gap: 16px;
+        }
+      }
+
+      .cardTitle {
+        font-size: 18px;
+        font-weight: 500;
+        color: $txt-grey;
+        line-height: 23px;
+        @include on-tablet {
+          font-size: 20px;
+        }
+      }
+      .cardData {
+        display: flex;
+        align-items: center;
+        font-size: 28px;
+        gap: 12px;
+        width: 100%;
+        text-decoration: none;
+        @include on-tablet {
+          font-size: 40px;
+        }
+      }
+    }
+  }
+  &Map {
+    margin-top: 12px;
+    @include on-tablet {
+      margin-top: 20px;
+    }
+    @include on-design {
+      margin-top: 32px;
+    }
+    iframe {
+      width: 100%;
+      height: 250px;
+      @include on-design {
+        height: 350px;
+      }
+    }
+  }
+}

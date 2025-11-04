@@ -1,0 +1,95 @@
+@use '../../assets/styles/mixin' as *;
+@use '../../assets/styles/colors' as *;
+.sectionTitle {
+  &_titleBlock {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &_title {
+    color: $txt-black;
+    font-size: 2.5rem;
+    flex: 0 0 auto;
+    padding-inline-end: 0;
+
+    @include on-tablet {
+      padding-inline-end: 16px;
+    }
+
+    @include on-laptop {
+      padding-inline-end: 32px;
+    }
+  }
+
+  &_titleLine {
+    flex: 1;
+    width: 100%;
+    height: 1px;
+    background-color: $light-grey;
+    display: none;
+
+    @include on-mobile {
+      display: block;
+    }
+  }
+
+  &_button__outlined {
+    @include buttonOutlined;
+    @include on-design {
+      width: 156px;
+    }
+
+    &:hover {
+      background-color: $light_green;
+      cursor: pointer;
+    }
+
+    &_inTitle {
+      display: none;
+
+      @include on-mobile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    &_outside {
+      margin-inline: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      @include on-mobile {
+        display: none;
+      }
+    }
+  }
+
+  &_emptyInfo {
+    margin-bottom: 24px;
+
+    @include on-laptop {
+      margin-bottom: 32px;
+    }
+  }
+
+  &_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 286px;
+    height: 48px;
+    background-color: $green;
+    color: $txt-white;
+    transition-duration: 300ms;
+    border-radius: 6px;
+    border: 1px solid $green;
+
+    &:hover {
+      background-color: $light_green;
+      cursor: pointer;
+    }
+  }
+}

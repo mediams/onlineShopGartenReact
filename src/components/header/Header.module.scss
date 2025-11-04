@@ -1,0 +1,118 @@
+@use '../../assets/styles/mixin' as *;
+@use '../../assets/styles/colors' as *;
+
+.discountBtn {
+  @include linkSectionNav;
+  border: 1px solid $green;
+  background-color: $green;
+  color: $txt-white;
+  &:hover {
+    color: $green;
+    background-color: $light_green;
+  }
+}
+
+.navWrapper {
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  display: flex;
+  max-width: 518px;
+}
+
+.headerWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+
+  @include on-mobile {
+    padding: 30px 0;
+
+  }
+}
+.icons {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  position: relative;
+  a {
+    position: relative;
+  }
+  .сounter {
+    position: absolute;
+    left: 1px;
+    top: 7px;
+    background-color: $green;
+    color: $txt-white;
+    border-radius: 50%;
+    width: 17px;
+    height: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 8px;
+    cursor: pointer;
+    @include on-tablet {
+      width: 23px;
+      height: 23px;
+      font-size: 11px;
+      top: 4px;
+    }
+    @include on-design {
+      width: 26px;
+      height: 26px;
+      font-size: 12px;
+      top: 5px;
+    }
+  }
+}
+.svgBtn {
+  stroke-width: 1.3;
+  width: 44px;
+  height: 44px;
+}
+.header {
+  margin-inline: auto;
+  // max-width: 1440px;
+  border-bottom: 1px solid $light-grey;
+}
+body.light {
+  --link-color: var(--link-color-light);
+}
+
+body.dark {
+  --link-color: var(--link-color-dark);
+}
+
+a {
+  color: var(--link-color);
+}
+
+a:hover {
+  color: var(--green);
+}
+
+.navIcons {
+  display: flex;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.svgLink {
+  stroke-width: 1.1;
+  width: 32px;
+  height: 32px;
+  @include on-tablet {
+    width: 44px;
+    height: 44px;
+  }
+
+  @include on-design {
+    width: 46px;
+    height: 46px;
+  }
+}
+.burgerBtn {
+  background: transparent;
+}

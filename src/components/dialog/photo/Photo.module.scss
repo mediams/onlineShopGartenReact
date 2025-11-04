@@ -1,0 +1,17 @@
+@use '../../../assets/styles/mixin' as *;
+@use '../../../assets/styles/colors' as *;
+
+dialog {
+  position: fixed;
+  border: none;
+
+  border-radius: 20px;
+  display: flex;
+  z-index: 100;
+  max-width: 440px;
+  height: 70%;
+
+  @include on-laptop {
+    max-width: 600px;
+  }
+}

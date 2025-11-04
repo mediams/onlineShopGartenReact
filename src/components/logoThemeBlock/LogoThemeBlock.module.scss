@@ -1,0 +1,30 @@
+@use '../../assets/styles/mixin' as *;
+@use '../../assets/styles/colors' as *;
+img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: inline-block;
+}
+.logo {
+  width: 44px;
+  transition: filter 0.3s ease;
+  @include on-tablet {
+    width: 60px;
+  }
+  @include on-laptop {
+    width: 68px;
+  }
+  @include on-design {
+    width: 70px;
+  }
+  &:hover {
+    filter: brightness(105%);
+  }
+}
+.flexContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}

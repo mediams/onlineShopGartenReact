@@ -1,0 +1,1 @@
+export const BASE_BACKEND_URL = 'https://telran-project-backend-6jsr.onrender.com';

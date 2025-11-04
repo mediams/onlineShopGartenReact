@@ -1,0 +1,454 @@
+@use '../../assets/styles/colors' as *;
+@use '../../assets/styles/_mixin' as *;
+
+.productContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  gap: 20px;
+  height: fit-content;
+  transition-duration: 300ms;
+  padding-bottom: 47px;
+
+  @include on-mobile {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  @include on-tablet {
+    padding-bottom: 52px;
+  }
+  @include on-design {
+    padding-bottom: 60px;
+  }
+}
+
+.productImg {
+  position: relative;
+  @include borderFilter;
+  border-radius: 8px;
+  overflow: hidden;
+  grid-column: span 1;
+  align-self: start;
+  transition-duration: 300ms;
+  @include on-mobile {
+    grid-column: 1 / 2;
+  }
+}
+.productImg:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  & .img {
+    scale: 1.1;
+  }
+}
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition-duration: 300ms;
+}
+
+.productInfoWrapper {
+  gap: 12px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  grid-column: span 1;
+
+  @include on-mobile {
+    align-items: flex-start;
+    grid-column: 2;
+    gap: 20px;
+  }
+}
+
+.titleWrapper_mobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  grid-column: span 1;
+
+  @include on-mobile {
+    grid-column: 1 / 3;
+  }
+  @include on-tablet {
+    display: none;
+  }
+}
+.titleWrapper_tablet {
+  display: none;
+  @include on-tablet {
+    display: flex;
+  }
+}
+.productTitle {
+  font-weight: 700;
+  font-size: clamp(1.75rem, 7vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: 3%;
+  text-wrap: balance;
+  padding-inline-end: 16px;
+}
+
+.flexWrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.productPrice {
+  font-size: clamp(2rem, 10vw, 4rem);
+  font-weight: 600;
+}
+
+.productDiscountPrice {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  color: $txt-grey;
+  text-decoration: line-through;
+}
+
+.discountChip {
+  display: none;
+  display: flex;
+  align-self: flex-start;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  background-color: $sale;
+  color: $txt-white;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  display: none;
+  @include on-tablet {
+    display: block;
+    font-size: 16px;
+    padding: 6px 10px;
+  }
+
+  @include on-design {
+    font-size: 20px;
+  }
+}
+.discountChip_mobile {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-self: flex-start;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  background-color: $sale;
+  color: $txt-white;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+
+  @include on-tablet {
+    display: none;
+  }
+}
+.actionsWrapper {
+  width: 100%;
+  @include on-laptop {
+    display: flex;
+    align-items: normal;
+    gap: 16px;
+    margin-top: 24px;
+  }
+}
+
+.quantityControl {
+  border: 1px solid $light-grey;
+  border-radius: 6px;
+  max-width: 167px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+  overflow: hidden;
+  background: $txt-white;
+  border-inline-end: none;
+  border-inline-start: none;
+  overflow: hidden;
+  margin-inline: auto;
+  margin-block-end: 20px;
+
+  @include on-mobile {
+    height: 47px;
+    margin-inline: 0;
+  }
+
+  @include on-tablet {
+    min-width: 200px;
+    height: 58px;
+  }
+}
+
+.quantityBtn {
+  box-sizing: content-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 40px;
+  height: 40px;
+  background: $txt-white;
+  color: $txt-grey;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid $light-grey;
+  border-radius: 6px;
+
+  @include on-mobile {
+    flex: 0 0 47px;
+    height: 47px;
+    font-size: 20px;
+  }
+
+  @include on-tablet {
+    flex: 0 0 58px;
+    height: 58px;
+    font-size: 22px;
+  }
+
+  @include on-laptop {
+    font-size: 24px;
+  }
+
+  &:hover {
+    background: #f2f6d3;
+    color: $grey;
+  }
+}
+
+.quantityValue {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  height: 40px;
+  background: $txt-white;
+  font-size: 16px;
+  color: $txt-black;
+  user-select: none;
+  min-width: 40px;
+
+  @include on-mobile {
+    width: 70px;
+    height: 47px;
+    font-size: 16px;
+  }
+  @include on-tablet {
+    flex: none;
+    width: 84px;
+    height: 58px;
+    font-size: 24px;
+  }
+
+  @include on-laptop {
+    width: 59px;
+    height: 58px;
+    font-size: 24px;
+  }
+
+  @include on-design {
+    width: 84px;
+    height: 58px;
+    font-size: 24px;
+  }
+}
+
+.addToCartBtn {
+  @include productCartBtn;
+  background: $green;
+  color: $txt-white;
+  border: 1px solid $green;
+  background-color: $green;
+  color: $txt-white;
+  height: 47px;
+  font-size: clamp(1.125rem, 3vw, 1.5rem);
+
+  &:hover {
+    color: $green;
+    background-color: $light_green;
+  }
+
+  @include on-tablet {
+    height: 58px;
+  }
+}
+.addToCartBtn_inactive {
+  height: auto;
+  @include productCartBtn;
+  background-color: $txt-white;
+  border: 1px solid $txt-black;
+  color: $txt-black;
+  cursor: not-allowed;
+
+  @include on-tablet {
+    font-size: 17px;
+    padding: 0px 40px;
+  }
+
+  @include on-mobile {
+    font-size: 18px;
+    padding: 0px 48px;
+  }
+
+  @include on-tablet {
+    font-size: 18px;
+  }
+
+  @include on-laptop {
+    font-size: 18px;
+  }
+
+  @include on-design {
+    font-size: 24px;
+  }
+}
+.productDescriptionWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  grid-column: span 1;
+
+  @include on-mobile {
+    grid-column: 1 / 3;
+  }
+  @include on-tablet {
+    gap: 14px;
+  }
+
+  @include on-laptop {
+    display: none;
+  }
+}
+.productDescriptionWrapper_laptop {
+  display: none;
+  @include on-laptop {
+    display: block;
+  }
+}
+.descriptionTitle {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.3;
+
+  @include on-tablet {
+    font-size: 19px;
+  }
+
+  @include on-laptop {
+    font-size: 20px;
+    line-height: 26px;
+  }
+}
+
+.descriptionText {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.4;
+
+  @include on-tablet {
+    font-size: 15px;
+  }
+
+  @include on-laptop {
+    font-size: 16px;
+    line-height: 20.8px;
+  }
+}
+
+body.dark {
+  --svg-stroke: var(--link-color-light);
+}
+.moreBtn {
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
+  transition-duration: 300ms;
+
+  @include on-tablet {
+    font-size: 15px;
+  }
+
+  @include on-laptop {
+    font-size: 16px;
+  }
+}
+
+.heartBtn {
+  background-color: transparent;
+  cursor: pointer;
+  transition-duration: 300ms;
+  justify-content: flex-end;
+  & svg {
+    stroke-width: 1.1;
+    width: 40px;
+    height: 40px;
+    &:hover {
+      stroke: $green;
+    }
+
+    @include on-tablet {
+      width: 48px;
+      height: 48px;
+    }
+  }
+}
+
+.icons {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  & button {
+    background-color: transparent;
+  }
+  & svg {
+    fill: $txt-white;
+    stroke: $txt-black;
+    stroke-width: 1.1;
+    width: 32px;
+    height: 32px;
+    @include on-tablet {
+      width: 44px;
+      height: 44px;
+    }
+
+    @include on-design {
+      width: 46px;
+      height: 46px;
+    }
+  }
+  &_light {
+    & svg {
+      stroke: $txt-black;
+    }
+    & svg:hover {
+      stroke: $green;
+    }
+  }
+  &_dark {
+    & svg {
+      stroke: $txt-black;
+    }
+    & svg:hover {
+      stroke: $green;
+    }
+  }
+  &_active {
+    & svg {
+      fill: $green;
+    }
+    & svg:hover {
+      fill: $green;
+      stroke: $divider_grey;
+    }
+  }
+}

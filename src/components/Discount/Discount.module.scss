@@ -1,0 +1,75 @@
+@use '../../assets/styles/mixin' as *;
+@use '../../assets/styles/colors' as *;
+
+.discountForm {
+  width: 100%;
+  border-radius: 10px;
+  background: linear-gradient(80.46deg, #87933d -0.68%, #55610b 66.66%);
+}
+
+.discountFormText {
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  color: #ffffff;
+  padding: 24px 20px;
+  @include on-tablet {
+    font-size: 48px;
+    line-height: 53px;
+    padding: 32px 20px 24px;
+  }
+  @include on-design {
+    font-size: 64px;
+    line-height: 53px;
+  }
+}
+
+.discountFormInfoWrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+
+  @include on-tablet {
+    flex-direction: row;
+    align-items: end;
+  }
+}
+.formWrapper {
+  width: 100%;
+  padding: 0 20px;
+  @include on-tablet {
+    max-width: 490px;
+    padding: 0px 32px 24px;
+  }
+  @include on-laptop {
+    max-width: 580px;
+    padding: 32px 32px;
+  }
+}
+.image {
+  width: 100%;
+  height: auto;
+  min-height: 323px;
+  object-fit: cover;
+
+  @include on-tablet {
+    min-height: 308px;
+    object-position: right bottom;
+    max-width: 602px;
+  }
+  @include on-laptop {
+    min-height: 308px;
+    object-position: right bottom;
+    max-width: 748px;
+  }
+}
+.imageContainer {
+  position: relative;
+  margin-inline: auto;
+  overflow: clip;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}

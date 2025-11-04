@@ -1,0 +1,13 @@
+@use '../../assets/styles/_mixin' as *;
+.emptyContainer {
+  padding: 24px 0;
+  @include on-mobile {
+    padding: 56px 0;
+  }
+  @include on-laptop {
+    padding: 60px 0;
+  }
+  @include on-design {
+    padding: 80px 0;
+  }
+}

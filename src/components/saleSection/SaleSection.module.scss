@@ -1,0 +1,28 @@
+@use '../../assets/styles/mixin' as *;
+@use '../../assets/styles/colors' as *;
+
+.section {
+  padding-top: 16px;
+  @include on-tablet {
+    padding-top: 20px;
+  }
+    @include on-design {
+  padding-top: 68px;
+  }
+
+
+  &_button__outlined {
+    @include buttonOutlined;
+    margin: auto;
+
+    margin-bottom: 56px;
+
+    &:hover {
+      background-color: $light_green;
+      cursor: pointer;
+    }
+    @include on-mobile {
+      display: none;
+    }
+  }
+}

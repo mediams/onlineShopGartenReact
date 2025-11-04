@@ -1,0 +1,62 @@
+@use "../../assets/styles/mixin" as *;
+@use "../../assets/styles/colors" as *;
+.selectContainer {
+  position: relative;
+  width: 200px;
+}
+.selectBox {
+  @include borderFilter;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: $txt-white;
+  font-size: 14px;
+  color: $txt-black;
+  @include on-tablet {
+    font-size: 16px;
+  }
+}
+
+.selectText {
+  width: 200px;
+  font-size: 18px;
+  border-radius: 6px;
+  line-height: 1.26%;
+}
+
+.selectArrow {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.selectArrow.open {
+  transform: rotate(180deg);
+}
+
+.selectDropdown {
+  @include borderFilter;
+
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: $bg-light;
+  list-style: none;
+  padding: 11px 0 16px;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 10;
+  overflow: hidden;
+  color: $txt-grey;
+}
+
+.selectDropdown li {
+  padding: 5px 16px;
+  cursor: pointer;
+}
+
+.selectDropdown li:hover {
+  background-color: $light_green;
+}

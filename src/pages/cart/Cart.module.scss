@@ -1,0 +1,195 @@
+@use '../../assets/styles/colors' as *;
+@use '../../assets/styles/mixin' as *;
+
+.cart {
+  padding-block: 40px;
+
+  &_empty {
+    margin-block-end: 24px;
+  }
+
+  &_withItems {
+    display: block;
+    margin-block-end: 24px;
+
+    @include on-tablet {
+      margin-block-end: 0;
+    }
+
+    @include on-laptop {
+      display: flex;
+      column-gap: 20px;
+    }
+
+    @include on-design {
+      column-gap: 32px;
+    }
+  }
+
+  &_items {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+    margin-block-end: 20px;
+
+    @include on-laptop {
+      flex: 1;
+    }
+  }
+
+  &_titleBlock {
+    margin-block-end: 24px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include on-laptop {
+      margin-block-end: 32px;
+    }
+  }
+
+  &_title {
+    
+    flex: 0 0 auto;
+    padding-inline-end: 0;
+    width: min-content;
+
+    @include on-tablet {
+      padding-inline-end: 20px;
+      width: auto;
+    }
+
+    @include on-laptop {
+      padding-inline-end: 32px;
+    }
+  }
+
+  &_titleLine {
+    flex: 1;
+    width: 100%;
+    height: 1px;
+    background-color: $light-grey;
+    display: none;
+
+    @include on-tablet {
+      display: block;
+    }
+  }
+
+  &_button__outlined {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 156px;
+    height: 32px;
+    font-size: 0.875rem;
+    transition-duration: 300ms;
+    border-radius: 6px;
+    background-color: transparent;
+    color: $txt-grey;
+    border: 1px solid $light-grey;
+
+    &:hover {
+      cursor: pointer;
+      border: 1px solid $light_green;
+      color: $light_green;
+    }
+
+    &_inTitle {
+      display: none;
+
+      @include on-mobile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    &_outside {
+      margin-inline: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      @include on-mobile {
+        display: none;
+      }
+    }
+  }
+
+  &_emptyInfo {
+    margin-bottom: 24px;
+
+    @include on-laptop {
+      margin-bottom: 32px;
+    }
+  }
+
+  &_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 286px;
+    height: 48px;
+    background-color: $green;
+    color: $txt-white;
+    transition-duration: 300ms;
+    border-radius: 6px;
+    border: 1px solid $green;
+
+    &:hover {
+      cursor: pointer;
+      color: $light-grey;
+    }
+  }
+
+  &_formTitle {
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    color: $txt-black;
+    margin-bottom: 12px;
+
+    @include on-design {
+      margin-bottom: 24px;
+    }
+  }
+
+  &_orderDetails {
+    width: 100%;
+    height: fit-content;
+    padding-inline: clamp(20px, 3vw, 32px);
+    padding-block: clamp(24px, 4vw, 32px);
+    border-radius: 10px;
+    background-color: $light_green;
+
+    @include on-laptop {
+      flex: 0 0 clamp(470px, 47vw, 548px);
+    }
+  }
+
+  &_orderPreis {
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 52px;
+    color: #8b8b8b;
+    margin-block-end: 20px;
+
+    p {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+
+      &:last-of-type {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      span {
+        font-size: clamp(40px, 5vw, 64px);
+        font-weight: bold;
+        color: $txt-black;
+      }
+    }
+  }
+}

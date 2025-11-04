@@ -1,0 +1,76 @@
+@use "../../assets/styles/mixin" as *;
+@use "../../assets/styles/colors" as *;
+.btn {
+  background-color: $grey;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 52px;
+  height: 28px;
+  @include on-tablet {
+    width: 60px;
+    height: 32px;
+  }
+}
+.themeToggle {
+  position: relative;
+  display: flex;
+}
+.themeSwitch {
+  display: none;
+}
+
+.btn::before {
+  position: absolute;
+  content: "";
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: $txt-white;
+  transition: transform 0.3s ease;
+  transform: translateX(2px);
+  width: 24px;
+  height: 24px;
+  @include on-tablet {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.themeSwitch:checked + .btn {
+  background-color: $txt-white;
+}
+.themeSwitch:checked + .btn::before {
+  background-color: $grey;
+  transform: translateX(25px);
+  @include on-tablet {
+    transform: translateX(30px);
+  }
+}
+.iconMoon,
+.iconSun {
+  position: absolute;
+  top: 17%;
+  width: 17px;
+  height: 17px;
+  @include on-tablet {
+    top: 20%;
+    width: 20px;
+    height: 20px;
+  }
+}
+.iconMoon {
+  left: 56%;
+  stroke: $txt-white;
+}
+.iconSun {
+  right: 56%;
+}
+
+.iconSun path,
+circle {
+  stroke: $grey;
+}

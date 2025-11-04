@@ -1,0 +1,43 @@
+.page {
+  body {
+    overflow-x: hidden;
+    .modal {
+      overflow: hidden;
+      color: #424436;
+      background-color: #fffff1;
+    }
+    &.dark {
+      .button {
+        svg {
+          stroke: #ffffff;
+        }
+      }
+      .modal {
+        background-color: #424436;
+        color: #fffff1;
+        button {
+          color: #fffff1;
+        }
+        svg {
+          stroke: #ffffff;
+        }
+      }
+      .product {
+        svg {
+          stroke: #ffffff;
+        }
+      }
+    }
+  }
+  dialog [open] {
+    overflow-x: hidden;
+  }
+
+  & .dark .bread_crumbs__link {
+    &:last-child {
+      &::after {
+        background: #424436;
+      }
+    }
+  }
+}
