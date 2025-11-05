@@ -116,8 +116,34 @@ export const fetchCategories = createAsyncThunk(
       throw new Error('Failed to fetch!' + response.statusText);
     }
 
-    let data = await response.json();
-    return data;
+    const raw = await response.json();
+    const list = Array.isArray(raw) ? raw : (raw?.content ?? raw?.items ?? []);
+
+    const normalize = (item, i) => ({
+      id:
+        item?.id ??
+        item?._id ??
+        item?.categoryId ??
+        item?.slug ??
+        `cat-${i}`,
+      name:
+        item?.name ??
+        item?.category ?? 
+        item?.categoryName ??
+        item?.title ??
+        item?.attributes?.name ??
+        item?.translations?.de?.name ??
+        item?.translations?.en?.name ??
+        'Without Name',
+      imageUrl:
+        item?.imageUrl ??
+        item?.image ??
+        item?.attributes?.imageUrl ??
+        item?.image_path ??
+        ''
+    });
+
+    return list.map(normalize);
   }
 );
 

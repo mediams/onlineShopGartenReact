@@ -28,11 +28,9 @@ const CategoryCard = ({ limit, onCategoriesPage }) => {
         }
       >
         {categories.slice(0, limit).map((item) => {
-          const categoryName = item?.name ?? item?.title ?? 'Category';
-          const categoryImagePath = item?.imageUrl ?? item?.image ?? '';
-          const imageSrc = categoryImagePath.startsWith('http')
-            ? categoryImagePath
-            : `${BASE_BACKEND_URL}${categoryImagePath}`;
+          const imageSrc = item.imageUrl?.startsWith('http')
+            ? item.imageUrl
+            : `${BASE_BACKEND_URL}${item.imageUrl}`;
 
           return (
             <Link key={item.id} to={`/categories/${item.id}`}>
@@ -40,13 +38,14 @@ const CategoryCard = ({ limit, onCategoriesPage }) => {
                 <div className={styles.imageContainer}>
                   <img
                     src={imageSrc}
-                    alt={`Category ${categoryName}`}
+                    alt={`Категория: ${item.name}`}
                     className={styles.categoriesImage}
+                    loading="lazy"
                   />
                 </div>
               </div>
               <div className={styles.categoriesTitle}>
-                <p>{categoryName}</p>
+                <p>{item.name}</p>
               </div>
             </Link>
           );
