@@ -24,11 +24,12 @@ export default function Cart() {
 
   useEffect(() => {
     if (cartData.length > 0) {
-      const summ = cartData.reduce(
-        (acc, currVal) =>
-          acc + (currVal.discont_price ?? currVal.price) * currVal.count,
-        0
-      );
+      const summ = cartData.reduce((acc, p) => {
+      const price = Number(p.price) || 0;
+      const discount = Number(p.discont_price) || 0;
+      const actual = discount > 0 ? discount : price;
+      return acc + actual * (Number(p.count) || 0);
+      }, 0);
       setTotalPrice(summ.toFixed(2));
     }
   }, [cartData]);
@@ -62,15 +63,15 @@ export default function Cart() {
         {cartData.length > 0 && (
           <div className={styles.cart_withItems}>
             <div className={styles.cart_items}>
-              {cartData.map((item) => (
-                <ItemInCart key={item.id || index} product={item} />
+              {cartData.map((item, index) => (
+                <ItemInCart key={item.id ?? index} product={item} />
               ))}
             </div>
             <div className={styles.cart_orderDetails}>
               <h3 className={styles.cart_formTitle}>Order Details</h3>
 
               <div className={styles.cart_orderPreis}>
-                <p>{cartData.length}items</p>
+                <p>{cartData.length} items</p>
                 <p className={styles.total}>
                   Total <span>${totalPrice}</span>
                 </p>

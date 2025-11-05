@@ -60,7 +60,17 @@ export const productSlice = createSlice({
       .addCase(fetchProductsByCategoryId.fulfilled, (state, action) => {
         state.loading = false;
         state.category = action.payload.category;
-        state.data = action.payload.data;
+        state.data = action.payload.map((item, i) => {
+          const id = item.id ?? item.productId ?? item._id ?? `p-${i}`;
+          const price = Number(item.price) || 0;
+          const discont = Number(item.discont_price ?? item.discountPrice) || 0;
+          return {
+            ...item,
+            id,
+            price,
+            discont_price: discont
+          };
+        });
       })
       .addCase(fetchProductsByCategoryId.rejected, (state, action) => {
         state.loading = false;

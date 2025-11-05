@@ -39,11 +39,19 @@ export default function ProductsList({ data, loading, error, path = '' }) {
           dispatch(addToWishlist(item));
         }
       } else if (type === 'cart') {
-        let isInCart = items.some((cartItem) => cartItem.id === item.id);
+        const pid = item.id ?? item.productId ?? item._id;
+        const price = Number(item.price) || 0;
+        const discont = Number(item.discont_price) || 0;
+        const isInCart = items.some((ci) => (ci.id ?? ci.productId ?? ci._id) === pid);
         if (isInCart) {
-          dispatch(removeAllProductbyIdFromCart(item.id));
+          dispatch(removeAllProductbyIdFromCart(pid));
         } else {
-          dispatch(addToCart(item));
+          dispatch(addToCart({
+            ...item,
+            id: pid,
+            price,                 // исходная цена ЧИСЛОМ
+            discont_price: discont // цена со скидкой (0 если нет скидки)
+          }));
         }
       }
     },
@@ -106,32 +114,37 @@ export default function ProductsList({ data, loading, error, path = '' }) {
     <div className={styles.cardsContainer}>
       {filteredData.length > 0 ? (
         filteredData.map((item) => {
-          let isInCart = items.some((cartItem) => cartItem.id === item.id);
-          let isInLikes = likeItems.some((likeItem) => likeItem.id === item.id);
+          const pid = item.id ?? item.productId ?? item._id;
+          let isInCart  = items.some(ci  => (ci.id  ?? ci.productId ?? ci._id) === pid);
+          let isInLikes = likeItems.some(li => (li.id ?? li.productId ?? li._id) === pid);
 
           return (
-            <div key={item.id} className={styles.wrapperLink}>
+            <div key={pid} className={styles.wrapperLink}>
               <div
                 className={` ${styles.icons} ${isDarkTheme ? styles.icons_dark : styles.icons_light}`}
               >
                 <button
                   name="heart"
                   className={` ${isInLikes ? styles.icons_active : ''}  `}
-                  onClick={(e) => handleClickIcons(e.currentTarget.name, item)}
+                 onClick={(e) =>
+                  handleClickIcons(e.currentTarget.name, { ...item, id: pid })
+                }
                 >
                   <Heart className={styles.svgLink} />
                 </button>
                 <button
                   name="cart"
                   className={` ${isInCart ? styles.icons_active : ''}`}
-                  onClick={(e) => handleClickIcons(e.currentTarget.name, item)}
+                  onClick={(e) =>
+                    handleClickIcons(e.currentTarget.name, { ...item, id: pid })
+                  }
                 >
                   <ShoppingBag className={styles.svgLink} />
                 </button>
               </div>
-              <Link to={`./${path}${item.id}`}>
+              <Link to={`./${path}${pid}`}>
                 <SaleCard
-                  id={item.id}
+                  id={pid}
                   price={item.price}
                   title={item.title}
                   image={item.image}

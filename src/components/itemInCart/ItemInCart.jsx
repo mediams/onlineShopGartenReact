@@ -16,17 +16,17 @@ export default function ItemInCart({product}) {
   const { cartData } = useSelector((state) => state.cart);
 
   const handleRemoveItem = () => {
-    const remove = cartData.find(item => item.id === +product.id);
+    const remove = cartData.find(item => String(item.id) === String(product.id));
     dispatch(removeItemFromCart(remove));
   }
 
   const handleIncreaseNuber = () => {
-    const currEl = cartData.find(item => item.id === product.id).id;
+    const currEl = cartData.find(item => String(item.id) === String(product.id))?.id;
     dispatch(increaseCountInCartItem(currEl));
   }
 
   const handleDecreaseNuber = () => {
-    const currEl = cartData.find(item => item.id === product.id);
+    const currEl = cartData.find(item => String(item.id) === String(product.id));
     if(currEl.count > 1) {
       dispatch(decreaseCountInCartItem(currEl.id));
     } else {
@@ -64,10 +64,17 @@ export default function ItemInCart({product}) {
             </button>
           </div>
           <div className={styles.itemInCart_priceBox}>
-            <p>
-              ${product.discont_price ?? product.price}{' '}
-              {product.discont_price && <span>${product.price}</span>}
-            </p>
+            {(() => {
+              const price = Number(product.price) || 0;
+              const discount = Number(product.discont_price) || 0;
+              const actual = discount > 0 ? discount : price;
+            return (
+              <p>
+              ${actual}{' '}
+              {discount > 0 && <span>${price}</span>}
+              </p>
+            );
+          })()}
           </div>
         </div>
       </div>

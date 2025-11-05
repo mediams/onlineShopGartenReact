@@ -77,10 +77,10 @@ export const cartSlice = createSlice({
 
     increaseCountInCartItem: (state, action) => {
       let currData = state.cartData.map((item) => ({ ...item }));
-      let tempItem = state.cartData.find((item) => item.id === +action.payload);
+      let tempItem = state.cartData.find((item) => String(item.id) === String(action.payload));
       tempItem = { ...tempItem, count: tempItem.count + 1 };
       state.cartData = currData.map((item) =>
-        item.id === +action.payload ? tempItem : item
+        String(item.id) === String(action.payload) ? tempItem : item
       );
 
       updateLocalStorage(state.cartData);
@@ -88,10 +88,10 @@ export const cartSlice = createSlice({
 
     decreaseCountInCartItem: (state, action) => {
       let currData = state.cartData.map((item) => ({ ...item }));
-      let tempItem = state.cartData.find((item) => item.id === +action.payload);
+      let tempItem = state.cartData.find((item) => String(item.id) === String(action.payload));
       tempItem = { ...tempItem, count: tempItem.count - 1 };
       state.cartData = currData.map((item) =>
-        item.id === +action.payload ? tempItem : item
+        String(item.id) === String(action.payload) ? tempItem : item
       );
 
       updateLocalStorage(state.cartData);
