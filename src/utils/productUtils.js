@@ -1,96 +1,79 @@
+// utils/productUtils.js
 import { BASE_BACKEND_URL } from './env';
 
 const toNumber = (value) => {
-  if (value === null || value === undefined || value === '') {
-    return 0;
-  }
-
-  const numberValue = Number(value);
-  return Number.isFinite(numberValue) ? numberValue : 0;
+  if (value === null || value === undefined || value === '') return 0;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
 };
 
-export const getProductTitle = (product = {}) => {
-  return (
-    product?.name ??
-    product?.title ??
-    product?.productName ??
-    product?.label ??
-    'Product'
+// ---------- getters ----------
+export const getProductId = (p = {}, fallback) =>
+  p.id ?? p.productId ?? p._id ?? fallback;
+
+export const getProductTitle = (p = {}) =>
+  p.title ?? p.name ?? p.productName ?? p.label ?? 'Product';
+
+export const getProductImagePath = (p = {}) =>
+  p.image ?? p.imageUrl ?? p.image_url ?? p.imagePath ?? '';
+
+export const getProductPrice = (p = {}) =>
+  toNumber(p.price ?? p.originalPrice ?? p.basePrice ?? p.cost);
+
+export const getProductDiscountPrice = (p = {}) =>
+  toNumber(
+    p.discont_price ??
+      p.discountPrice ??
+      p.discount_price ??
+      p.salePrice ??
+      p.sale_price
   );
-};
 
-export const getProductImagePath = (product = {}) => {
-  return (
-    product?.image ??
-    product?.imageUrl ??
-    product?.image_url ??
-    product?.imagePath ??
-    ''
-  );
-};
+// ---------- helpers ----------
+export const hasProductDiscount = (price, discountPrice) =>
+  discountPrice > 0 && discountPrice < price;
 
-export const getProductPrice = (product = {}) => {
-  return toNumber(
-    product?.price ?? product?.originalPrice ?? product?.basePrice ?? product?.cost
-  );
-};
-
-export const getProductDiscountPrice = (product = {}) => {
-  return toNumber(
-    product?.discont_price ??
-      product?.discountPrice ??
-      product?.discount_price ??
-      product?.salePrice ??
-      product?.sale_price
-  );
-};
-
-export const hasProductDiscount = (price, discountPrice) => {
-  return discountPrice > 0 && discountPrice < price;
-};
-
-export const getActualProductPrice = (price, discountPrice) => {
-  return hasProductDiscount(price, discountPrice) ? discountPrice : price;
-};
+export const getActualProductPrice = (price, discountPrice) =>
+  hasProductDiscount(price, discountPrice) ? discountPrice : price;
 
 export const calculateDiscountPercentage = (price, discountPrice) => {
-  if (!hasProductDiscount(price, discountPrice) || price === 0) {
-    return 0;
-  }
-
-  const percentage = 100 - (discountPrice * 100) / price;
-  return Math.round(percentage);
-};
-
-export const normalizeProduct = (product = {}) => {
-  const title = getProductTitle(product);
-  const imagePath = getProductImagePath(product);
-  const price = getProductPrice(product);
-  const discountPrice = getProductDiscountPrice(product);
-
-  return {
-    ...product,
-    title,
-    name: product?.name ?? title,
-    image: imagePath,
-    imageUrl: product?.imageUrl ?? imagePath,
-    price,
-    discont_price: discountPrice,
-  };
+  if (!hasProductDiscount(price, discountPrice) || price === 0) return 0;
+  return Math.round(100 - (discountPrice * 100) / price);
 };
 
 export const resolveProductImageUrl = (imagePath = '') => {
-  if (!imagePath) {
-    return '';
-  }
+  if (!imagePath) return '';
+  if (/^https?:\/\//i.test(imagePath)) return imagePath;
 
-  if (/^https?:\/\//i.test(imagePath)) {
-    return imagePath;
-  }
-
-  const normalizedPath = imagePath.startsWith('/')
-    ? imagePath
-    : `/${imagePath}`;
-
+  const normalizedPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
   return `${BASE_BACKEND_URL}${normalizedPath}`;
+};
+
+// ---------- единая форма товара ----------
+export const normalizeProduct = (p = {}, index = 0) => {
+  const id = getProductId(p, String(index));
+  const title = getProductTitle(p);
+  const imagePath = getProductImagePath(p);
+  const price = getProductPrice(p);
+  const discont_price = getProductDiscountPrice(p);
+
+  return {
+    ...p,
+    id,
+    title,
+    name: p.name ?? title,
+    image: imagePath,                 // «сырой» путь
+    imageUrl: p.imageUrl ?? imagePath,
+    price,
+    discont_price,
+  };
+};
+
+// Полная нормализация + абсолютный URL картинок
+export const ensureProductShape = (p = {}, index = 0) => {
+  const base = normalizeProduct(p, index);
+  return {
+    ...base,
+    image: resolveProductImageUrl(base.image),
+  };
 };

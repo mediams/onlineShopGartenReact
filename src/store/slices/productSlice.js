@@ -5,12 +5,11 @@ import {
 } from '../../utils/fetchClient';
 import { getProductTitle, resolveProductImageUrl } from '../../utils/productUtils';
 
-
 export const productSlice = createSlice({
   name: 'products',
   initialState: {
     selectedCategoryId: '',
-    category: {},
+    category: {},        // всегда держим объект: { id, name }
     data: [],
     loading: false,
     error: '',
@@ -23,17 +22,19 @@ export const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // ====== ВСЕ ТОВАРЫ ======
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
         state.error = '';
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.selectedCategoryId = '';
+        state.category = {}; // для общего списка категории нет
         state.loading = false;
 
-        state.data = action.payload.map((item) => {
+        state.data = (Array.isArray(action.payload) ? action.payload : []).map((item) => {
           const price = Number(item.price ?? 0);
-          const discont = Number(item.discountPrice ?? 0); // с бэка: discountPrice
+          const discont = Number(item.discountPrice ?? item.discont_price ?? 0);
           let discountPercentage = 0;
 
           if (price > 0 && discont > 0) {
@@ -41,20 +42,20 @@ export const productSlice = createSlice({
           }
 
           return {
-            // оставляем всё, что пришло
             ...item,
-            // выравниваем имена под вашу карточку
             title: item.title ?? item.name,
-            discont_price: discont,     // если компонент ждёт это имя
-            image: item.image,          // уже полное URL по контракту DTO
+            discont_price: discont,
+            image: item.image, // приходит уже абсолютный URL
             discountPercentage: Number(discountPercentage.toFixed(2)),
           };
         });
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.error.message || 'Failed to load products';
       })
+
+      // ====== ТОВАРЫ ПО КАТЕГОРИИ ======
       .addCase(fetchProductsByCategoryId.pending, (state) => {
         state.loading = true;
         state.error = '';
@@ -64,29 +65,41 @@ export const productSlice = createSlice({
         state.loading = false;
         state.error = '';
 
-        // если thunk возвращает { category, products }
-        if (action.payload && action.payload.products) {
-          state.category = action.payload.category || {};
-          state.data = action.payload.products.map((p, i) => {
-            const id = p.id ?? p.productId ?? p._id ?? String(i);
-            const title = getProductTitle(p) || 'Untitled';
-            const image = resolveProductImageUrl(p.image ?? p.thumbnail ?? p.img ?? '');
-            const price = Number(p.price) || 0;
-            const discont = Number(p.discont_price ?? p.discount_price ?? p.discountedPrice) || 0;
+        const payload = action.payload ?? {};
 
-            return { id, title, image, price, discont_price: discont };
-          });
-          return;
-        }
+        // payload у тебя выглядит так:
+        // { categoryId: "2", category: "Protective products and septic tanks", products: [...] }
+        const catId =
+          payload.categoryId ??
+          payload.id ??
+          state.selectedCategoryId ??
+          '';
 
-        // если thunk возвращает массив продуктов (старый вариант)
-        state.category = action.payload.category || state.category || {};
-        state.data = (Array.isArray(action.payload) ? action.payload : []).map((p, i) => {
+        // если category — строка, берём её; если объект — имя/тайтл
+        const catName =
+          (typeof payload.category === 'string' && payload.category) ||
+          payload.category?.name ||
+          payload.category?.title ||
+          payload.name ||
+          payload.title ||
+          '';
+
+        // ДЕРЖИМ В СТОРЕ ВСЕГДА ОБЪЕКТ { id, name }
+        state.category = { id: String(catId), name: catName };
+
+        // Берём массив продуктов
+        const list = Array.isArray(payload.products)
+          ? payload.products
+          : (Array.isArray(payload) ? payload : []);
+
+        state.data = list.map((p, i) => {
           const id = p.id ?? p.productId ?? p._id ?? String(i);
           const title = getProductTitle(p) || 'Untitled';
           const image = resolveProductImageUrl(p.image ?? p.thumbnail ?? p.img ?? '');
           const price = Number(p.price) || 0;
-          const discont = Number(p.discont_price ?? p.discount_price ?? p.discountedPrice) || 0;
+          const discont = Number(
+            p.discont_price ?? p.discount_price ?? p.discountPrice ?? 0
+          );
 
           return { id, title, image, price, discont_price: discont };
         });
@@ -95,8 +108,8 @@ export const productSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to load category';
       });
-      
   },
 });
+
 export const { setSelectedCategoryId } = productSlice.actions;
 export default productSlice.reducer;

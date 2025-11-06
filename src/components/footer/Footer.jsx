@@ -27,14 +27,6 @@ export default function Footer() {
             <div className={styles.cardData}>
               <a
                 className={styles.cardDataLink}
-                href="https://www.linkedin.com/in/yevhenkariev"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Linkedin size={43} />
-              </a>
-              <a
-                className={styles.cardDataLink}
                 href="https://www.kariev.de"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -48,6 +40,14 @@ export default function Footer() {
                 rel="noopener noreferrer"
               >
                 <Github  size={43}/>
+              </a>
+              <a
+                className={styles.cardDataLink}
+                href="https://www.linkedin.com/in/yevhenkariev"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Linkedin size={43} />
               </a>
             </div>
           </li>

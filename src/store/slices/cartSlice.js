@@ -1,116 +1,87 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { ensureProductShape } from '../../utils/productUtils';
 
-const updateLocalStorage = (cartData) => {
-  localStorage.setItem('cart', JSON.stringify(cartData));
-};
-const initialState = {
-  cartData: [],
-};
+const save = (data) => localStorage.setItem('cart', JSON.stringify(data));
+
+const initialState = { cartData: [] };
+
 export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
     initDataFromLocalStorage: (state) => {
-      const cart = localStorage.getItem('cart');
-      if (cart) {
-        state.cartData = JSON.parse(cart);
+      const raw = localStorage.getItem('cart');
+      if (raw) {
+        const arr = JSON.parse(raw);
+        // Нормализуем все старые элементы (починит undefined)
+        state.cartData = Array.isArray(arr)
+          ? arr.map((p, i) => ensureProductShape(p, i))
+          : [];
       }
     },
 
+    // +1 к количеству или новый товар
     addToCart: (state, action) => {
-      let foundProduct = state.cartData.find(
-        (product) => product.id === action.payload.id
-      );
-
-      if (foundProduct) {
-        state.cartData = state.cartData.map((product) =>
-          product.id === action.payload.id
-            ? { ...product, count: product.count + 1 }
-            : product
-        );
-      } else {
-        state.cartData.push({ ...action.payload, count: 1 });
-      }
-
-      updateLocalStorage(state.cartData);
+      const incoming = ensureProductShape(action.payload);
+      const found = state.cartData.find(p => String(p.id) === String(incoming.id));
+      if (found) found.count = (found.count || 1) + 1;
+      else state.cartData.push({ ...incoming, count: 1 });
+      save(state.cartData);
     },
+
+    // добавить конкретное количество
     addToCartByAmount: (state, action) => {
-      const { id, count } = action.payload;
-      const foundProduct = state.cartData.find((product) => product.id === id);
-
-      if (foundProduct) {
-        foundProduct.count += count;
-      } else {
-        state.cartData.push({ ...action.payload });
-      }
-      updateLocalStorage(state.cartData);
+      const incoming = ensureProductShape(action.payload);
+      const qty = Number(incoming.count) || 1;
+      const found = state.cartData.find(p => String(p.id) === String(incoming.id));
+      if (found) found.count = (found.count || 1) + qty;
+      else state.cartData.push({ ...incoming, count: qty });
+      save(state.cartData);
     },
+
     removeAllProductbyIdFromCart: (state, action) => {
-      let foundProduct = state.cartData.find(
-        (product) => product.id === action.payload
-      );
-
-      if (foundProduct) {
-        state.cartData = state.cartData
-          .map((product) => {
-            if (product.id === action.payload) {
-              product.count = 0;
-
-              if (product.count === 0) {
-                return null;
-              }
-            }
-            return product;
-          })
-          .filter((product) => product);
-      }
-
-      updateLocalStorage(state.cartData);
+      const id = String(action.payload);
+      state.cartData = state.cartData.filter(p => String(p.id) !== id);
+      save(state.cartData);
     },
 
     removeItemFromCart: (state, action) => {
-      state.cartData = state.cartData.filter(
-        (item) => item.id !== action.payload.id
-      );
-      updateLocalStorage(state.cartData);
+      const id = String(action.payload.id ?? action.payload);
+      state.cartData = state.cartData.filter(i => String(i.id) !== id);
+      save(state.cartData);
     },
 
     increaseCountInCartItem: (state, action) => {
-      let currData = state.cartData.map((item) => ({ ...item }));
-      let tempItem = state.cartData.find((item) => String(item.id) === String(action.payload));
-      tempItem = { ...tempItem, count: tempItem.count + 1 };
-      state.cartData = currData.map((item) =>
-        String(item.id) === String(action.payload) ? tempItem : item
+      const id = String(action.payload);
+      state.cartData = state.cartData.map(it =>
+        String(it.id) === id ? { ...it, count: (it.count || 1) + 1 } : it
       );
-
-      updateLocalStorage(state.cartData);
+      save(state.cartData);
     },
 
     decreaseCountInCartItem: (state, action) => {
-      let currData = state.cartData.map((item) => ({ ...item }));
-      let tempItem = state.cartData.find((item) => String(item.id) === String(action.payload));
-      tempItem = { ...tempItem, count: tempItem.count - 1 };
-      state.cartData = currData.map((item) =>
-        String(item.id) === String(action.payload) ? tempItem : item
-      );
-
-      updateLocalStorage(state.cartData);
+      const id = String(action.payload);
+      state.cartData = state.cartData
+        .map(it => (String(it.id) === id ? { ...it, count: (it.count || 1) - 1 } : it))
+        .filter(it => it.count > 0);
+      save(state.cartData);
     },
+
     removeAllItemsFromCart: (state) => {
       state.cartData = [];
-      updateLocalStorage(state.cartData);
+      save(state.cartData);
     },
   },
 });
 
 export const {
-  addToCart,
   initDataFromLocalStorage,
+  addToCart,
+  addToCartByAmount,
   removeAllProductbyIdFromCart,
   removeItemFromCart,
   increaseCountInCartItem,
   decreaseCountInCartItem,
-  addToCartByAmount,
   removeAllItemsFromCart,
 } = cartSlice.actions;
 
