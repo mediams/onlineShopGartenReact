@@ -348,9 +348,11 @@
 }
 
 .descriptionText {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* сколько строк показывать в свернутом состоянии */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 8rem; /* подбери под к-во строк/line-height */
 
   @include on-tablet {
     font-size: 15px;
@@ -360,6 +362,12 @@
     font-size: 16px;
     line-height: 20.8px;
   }
+}
+
+.expanded {
+  -webkit-line-clamp: unset;
+  max-height: none;
+  overflow: visible;
 }
 
 body.dark {

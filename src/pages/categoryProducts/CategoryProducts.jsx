@@ -4,20 +4,22 @@ import ProductsList from '../../components/productsList/ProductsList';
 import Filter from '../../components/filter/Filter';
 import Container from '../../components/container/Container';
 import SectionTitle from '../../components/sectionTitle/SectionTitle';
-import { useTheme } from '../../context/ThemeContext';
 import BreadCrumbs from '../../components/breadCrumbs/BreadCrumbs';
+
 export default function CategoryProducts() {
-  const { isDarkTheme } = useTheme();
   const { id } = useParams();
-  const { category, data } = useFetchCategoryId(id);
-  console.log(data);
+  const { category, data, loading, error } = useFetchCategoryId(id);
+
   return (
     <section>
       <Container>
         <BreadCrumbs />
         <SectionTitle>{category?.name ?? category?.title ?? 'Category'}</SectionTitle>
         <Filter />
-        <ProductsList data={data} />
+
+        {loading && <div>Loading...</div>}
+        {error && !loading && <div>Error: {error}</div>}
+        {!loading && !error && <ProductsList data={data} />}
       </Container>
     </section>
   );

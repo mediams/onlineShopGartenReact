@@ -151,31 +151,38 @@ const ProductDetailsSection = ({ product, loading }) => {
         </div>
         <div className={styles.productDescriptionWrapper_laptop}>
           <h3 className={styles.descriptionTitle}>Description</h3>
-          <p className={styles.descriptionText}>
-            {!loading && isExpanded
-              ? description
-              : typeof description === 'string'
-                ? `${description.slice(0, 200)}...`
+            <p
+              className={`${styles.descriptionText} ${isExpanded ? styles.expanded : ''}`}
+            >
+              {typeof description === 'string'
+                ? description
                 : 'Описание недоступно'}
-          </p>
-          <span className={styles.moreBtn} onClick={toggleDescription}>
-            {isExpanded ? 'hide' : 'Read more'}
-          </span>
+            </p>
+
+            {typeof description === 'string' && description.length > 200 && (
+              <span className={styles.moreBtn} onClick={toggleDescription}>
+                {isExpanded ? 'Hide' : 'Read more'}
+              </span>
+            )}
         </div>
       </div>
 
       <div className={styles.productDescriptionWrapper}>
         <h3 className={styles.descriptionTitle}>Description</h3>
-        <p className={styles.descriptionText}>
-          {!loading && isExpanded
+
+        <p
+          className={`${styles.descriptionText} ${isExpanded ? styles.expanded : ''}`}
+        >
+          {typeof description === 'string'
             ? description
-            : typeof description === 'string'
-              ? `${description.slice(0, 200)}...`
-              : 'Описание недоступно'}
+            : 'Описание недоступно'}
         </p>
-        <span className={styles.moreBtn} onClick={toggleDescription}>
-          {isExpanded ? 'hide' : 'Read more'}
-        </span>
+
+        {typeof description === 'string' && description.length > 200 && (
+          <span className={styles.moreBtn} onClick={toggleDescription}>
+            {isExpanded ? 'Hide' : 'Read more'}
+          </span>
+        )}
       </div>
     </div>
   );

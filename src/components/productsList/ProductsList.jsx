@@ -142,7 +142,7 @@ export default function ProductsList({ data, loading, error, path = '' }) {
                   <ShoppingBag className={styles.svgLink} />
                 </button>
               </div>
-              <Link to={`./${path}${pid}`}>
+              <Link to={`/products/${pid}`}>
                 <SaleCard
                   id={pid}
                   price={item.price}

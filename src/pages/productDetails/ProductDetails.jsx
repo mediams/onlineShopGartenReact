@@ -8,20 +8,19 @@ import styles from './ProductDetails.module.scss';
 
 const ProductDetails = () => {
   const { productId } = useParams();
-  const { details, error, loading } = useFetchDetails(productId);
-  const product = details[0];
+  const { product, error, loading } = useFetchDetails(productId);
 
   return (
     <section className={styles.productDetails}>
       <Container>
         <BreadCrumbs />
-        {error && <div>Error fetching data</div>}
+        {error && <div>Error: {error}</div>}
         {loading && <div>Loading...</div>}
-        {details?.length > 0 && productId && (
+        {product && (
           <ProductDetailsSection
             loading={loading}
             product={product}
-            productId={productId}
+            productId={product.id}
           />
         )}
       </Container>

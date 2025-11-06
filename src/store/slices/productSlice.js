@@ -3,6 +3,8 @@ import {
   fetchProductsByCategoryId,
   fetchProducts,
 } from '../../utils/fetchClient';
+import { getProductTitle, resolveProductImageUrl } from '../../utils/productUtils';
+
 
 export const productSlice = createSlice({
   name: 'products',
@@ -56,26 +58,44 @@ export const productSlice = createSlice({
       .addCase(fetchProductsByCategoryId.pending, (state) => {
         state.loading = true;
         state.error = '';
+        state.data = [];
       })
       .addCase(fetchProductsByCategoryId.fulfilled, (state, action) => {
         state.loading = false;
-        state.category = action.payload.category;
-        state.data = action.payload.map((item, i) => {
-          const id = item.id ?? item.productId ?? item._id ?? `p-${i}`;
-          const price = Number(item.price) || 0;
-          const discont = Number(item.discont_price ?? item.discountPrice) || 0;
-          return {
-            ...item,
-            id,
-            price,
-            discont_price: discont
-          };
+        state.error = '';
+
+        // если thunk возвращает { category, products }
+        if (action.payload && action.payload.products) {
+          state.category = action.payload.category || {};
+          state.data = action.payload.products.map((p, i) => {
+            const id = p.id ?? p.productId ?? p._id ?? String(i);
+            const title = getProductTitle(p) || 'Untitled';
+            const image = resolveProductImageUrl(p.image ?? p.thumbnail ?? p.img ?? '');
+            const price = Number(p.price) || 0;
+            const discont = Number(p.discont_price ?? p.discount_price ?? p.discountedPrice) || 0;
+
+            return { id, title, image, price, discont_price: discont };
+          });
+          return;
+        }
+
+        // если thunk возвращает массив продуктов (старый вариант)
+        state.category = action.payload.category || state.category || {};
+        state.data = (Array.isArray(action.payload) ? action.payload : []).map((p, i) => {
+          const id = p.id ?? p.productId ?? p._id ?? String(i);
+          const title = getProductTitle(p) || 'Untitled';
+          const image = resolveProductImageUrl(p.image ?? p.thumbnail ?? p.img ?? '');
+          const price = Number(p.price) || 0;
+          const discont = Number(p.discont_price ?? p.discount_price ?? p.discountedPrice) || 0;
+
+          return { id, title, image, price, discont_price: discont };
         });
       })
       .addCase(fetchProductsByCategoryId.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.error.message || 'Failed to load category';
       });
+      
   },
 });
 export const { setSelectedCategoryId } = productSlice.actions;

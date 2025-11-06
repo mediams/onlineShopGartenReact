@@ -1,122 +1,106 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { BASE_BACKEND_URL } from './env';
+import { API_ORIGIN, API_PREFIX } from './env';
+import { normalizeProduct, resolveProductImageUrl } from './productUtils';
 
-export const getAllCategories = async () => {
-  try {
-    const response = await fetch(`${BASE_BACKEND_URL}/categories`);
-    if (!response.ok) {
-      throw new Error('Something went wrong!');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+// Универсальный fetch с безопасной сборкой URL и вменяемыми ошибками
+async function apiFetch(path, options = {}) {
+  // Надёжно собираем адрес: new URL сам разрулит слэши
+  const url = new URL(`${API_PREFIX}${path}`, API_ORIGIN).toString();
 
-export const getCategoryById = async (id) => {
-  try {
-    const response = await fetch(`${BASE_BACKEND_URL}/categories/${id}`);
-    if (!response.ok) {
-      throw new Error('Something went wrong!');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+  const res = await fetch(url, {
+    // добавляй credentials: 'include' если нужны куки
+    headers: {
+      ...(options.headers || {}),
+    },
+    ...options,
+  });
 
-export const getAllProducts = async () => {
-  try {
-    const response = await fetch(`${BASE_BACKEND_URL}/products/all`);
-    if (!response.ok) {
-      throw new Error('Something went wrong!');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-export const getProductById = async (id) => {
-  try {
-    const response = await fetch(`${BASE_BACKEND_URL}/products/${id}`);
-    if (!response.ok) {
-      throw new Error('Something went wrong!');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-export const sendForSale = async (data) => {
-  try {
-    const response = await fetch(`${BASE_BACKEND_URL}/sale/send`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+  async function getCategoryById(categoryId) {
+  // допустим, бэкенд: GET /categories/:id => { id, name, products: [...] }
+  const raw = await apiFetch(`/categories/${categoryId}`);
+  const products = (raw.products ?? []).map(p => {
+    const norm = normalizeProduct({
+      ...p,
+      id: p.id ?? p.productId ?? p._id,
     });
+    return { 
+      ...norm, 
+      image: resolveProductImageUrl(norm.image) 
+    };
+  });
 
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
+  return {
+    category: {
+      id: raw.id ?? categoryId,
+      name: raw.name ?? raw.title ?? `Category ${categoryId}`,
+      title: raw.title ?? raw.name
+    },
+    products,
+  };
+}
+
+  // На случай 204 No Content
+  if (res.status === 204) return null;
+
+  const ct = res.headers.get('content-type') || '';
+
+  // Если это не JSON — кинем подробную ошибку с кусочком ответа
+  if (!ct.includes('application/json')) {
+    const text = await res.text().catch(() => '');
+    throw new Error(
+      `Ожидали JSON, получили ${res.status} ${ct}. URL: ${res.url}. Фрагмент: ${text.slice(0, 200)}`
+    );
   }
-};
 
-export const sendForOrder = async (data) => {
-  try {
-    const response = await fetch(`${BASE_BACKEND_URL}/order/send`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
+  // Если статус не ок — попробуем вытащить тело-ошибку
+  if (!res.ok) {
+    let errBody = '';
+    try { errBody = JSON.stringify(await res.json()); } catch (_) {}
+    throw new Error(`HTTP ${res.status} ${res.statusText}. ${errBody}`);
   }
-};
 
-// utils/fetchClient.js
+  return res.json();
+}
+
+// ====== ЧИСТЫЕ API-ФУНКЦИИ ======
+export const getAllCategories = () => apiFetch('/categories');
+
+export const getCategoryById = (id) => apiFetch(`/categories/${id}`);
+
+export const getAllProducts = () => apiFetch('/products/all');
+
+export const getProductById = (id) => apiFetch(`/products/${id}`);
+
+export const sendForSale = (data) =>
+  apiFetch('/sale/send', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const sendForOrder = (data) =>
+  apiFetch('/order/send', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+// ====== THUNKS (если они нужны именно здесь) ======
 export const fetchProducts = createAsyncThunk(
   'product/fetchProducts',
   async (type) => {
-    const response = await fetch(`${BASE_BACKEND_URL}/products/all`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch!' + response.statusText);
-    }
-
-    const data = await response.json(); 
+    const data = await getAllProducts();
     const list = Array.isArray(data) ? data : (data?.content ?? []);
-
-    if (type === 'all') {
-      return list;
-    } else {
-      return list.filter((item) => Number(item.discountPrice) > 0);
-    }
+    return type === 'all'
+      ? list
+      : list.filter((item) => Number(item.discountPrice) > 0);
   }
 );
-
 
 export const fetchCategories = createAsyncThunk(
   'product/fetchCategories',
   async () => {
-    const response = await fetch(`${BASE_BACKEND_URL}/categories`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch!' + response.statusText);
-    }
-
-    const raw = await response.json();
+    const raw = await getAllCategories();
     const list = Array.isArray(raw) ? raw : (raw?.content ?? raw?.items ?? []);
 
     const normalize = (item, i) => ({
@@ -128,7 +112,7 @@ export const fetchCategories = createAsyncThunk(
         `cat-${i}`,
       name:
         item?.name ??
-        item?.category ?? 
+        item?.category ??
         item?.categoryName ??
         item?.title ??
         item?.attributes?.name ??
@@ -140,7 +124,7 @@ export const fetchCategories = createAsyncThunk(
         item?.image ??
         item?.attributes?.imageUrl ??
         item?.image_path ??
-        ''
+        '',
     });
 
     return list.map(normalize);
@@ -149,28 +133,10 @@ export const fetchCategories = createAsyncThunk(
 
 export const fetchProductsByCategoryId = createAsyncThunk(
   'product/fetchProductsByCategoryId',
-  async (categoryId) => {
-    const response = await fetch(
-      `${BASE_BACKEND_URL}/categories/${categoryId}`
-    );
-    if (!response.ok) {
-      throw new Error('Failed to fetch!' + response.statusText);
-    }
-
-    let data = await response.json();
-    return data;
-  }
+  async (categoryId) => getCategoryById(categoryId)
 );
 
 export const fetchProductById = createAsyncThunk(
   'product/fetchProductById',
-  async (id) => {
-    const response = await fetch(`${BASE_BACKEND_URL}/products/${id}`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch!' + response.statusText);
-    }
-
-    let data = await response.json();
-    return data;
-  }
+  async (id) => getProductById(id)
 );
